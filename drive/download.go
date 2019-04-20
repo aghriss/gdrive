@@ -110,7 +110,7 @@ func (self *Drive) DownloadQuery(args DownloadQueryArgs) error {
 }
 
 func (self *Drive) downloadRecursive(args DownloadArgs) error {
-	f, err := self.service.Files.Get(args.Id).Fields("id", "name", "size", "mimeType", "md5Checksum").Do()
+	f, err := self.service.Files.Get(args.Id).Fields("id", "name", "size", "mimeType", "md5Checksum","params").Do()
 	if err != nil {
 		return fmt.Errorf("Failed to get file: %s", err)
 	}
@@ -134,7 +134,7 @@ func (self *Drive) downloadBinary(f *drive.File, args DownloadArgs) (int64, int6
 		if isTimeoutError(err) {
 			return 0, 0, fmt.Errorf("Failed to download file: timeout, no data was transferred for %v", args.Timeout)
 		}
-		return 0, 0, fmt.Errorf("Failed to download file: \n %s \n %s", f.Id, err)
+		return 0, 0, fmt.Errorf("Failed to download file: \n %s \n %s \n %s", f.Id,f.Params err)
 	}
 
 	// Close body on function exit
