@@ -4,6 +4,7 @@ A fork from the original [repo](https://github.com/gdrive-org/gdrive) <br>
 Edits from original version:
   -  Sets the acknowledgeAbuse to true for download: no  "Abusive File" error
   -  Delete files when downloading with "--recursive" is now possible
+  - Trashed files are not downloaded (TODO: Add it as option)
 
 ## Overview
 gdrive is a command line utility for interacting with Google Drive.
