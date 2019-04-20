@@ -129,12 +129,13 @@ func (self *Drive) downloadBinary(f *drive.File, args DownloadArgs) (int64, int6
 	// Get timeout reader wrapper and context
 	timeoutReaderWrapper, ctx := getTimeoutReaderWrapperContext(args.Timeout)
 	
-	res, err := self.service.Files.Get(f.Id).AcknowledgeAbuse(true).Context(ctx).Download()
+	//res, err := self.service.Files.Get(f.Id).AcknowledgeAbuse(true).Context(ctx).Download()
+	res, err := self.service.Files.Get(f.Id).Context(ctx).Download()
 	if err != nil {
 		if isTimeoutError(err) {
 			return 0, 0, fmt.Errorf("Failed to download file: timeout, no data was transferred for %v", args.Timeout)
 		}
-		return 0, 0, fmt.Errorf("Failed to download file: \n %s \n %s \n %s", f.Id,f.Capabilities, err)
+		return 0, 0, fmt.Errorf("Failed to download file: \n %s \n %s \n %s", f.Id,f.Capabilities.canCopy, err)
 	}
 
 	// Close body on function exit
@@ -144,7 +145,7 @@ func (self *Drive) downloadBinary(f *drive.File, args DownloadArgs) (int64, int6
 	fpath := filepath.Join(args.Path, f.Name)
 
 	if !args.Stdout {
-		fmt.Fprintf(args.Out, "Downloading %s -> %s\n", f.Name, fpath)
+		fmt.Fprintf(args.Out, "Downloading %s -> %s, Can Copy: %s\n", f.Name, fpath,f.Capabilities.canCopy)
 	}
 
 	return self.saveFile(saveFileArgs{
