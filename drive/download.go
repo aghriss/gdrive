@@ -121,7 +121,7 @@ func (self *Drive) downloadRecursive(args DownloadArgs) error {
 					if err2 != nil {
 						fmt.Printf("Failed to delete Folder: %s\n", err2)
 					} else {
-						fmt.Printf("Removed Folder:\n \t id: %s \n \t path: %s \n ", args.Id, args.Path)
+						fmt.Printf("Removed Folder:\n \t id: %s \n \t path: %s \n ", args.Id, filepath.Join(args.Path, f.Name))
 					}	
 				}
 			}
@@ -134,7 +134,7 @@ func (self *Drive) downloadRecursive(args DownloadArgs) error {
 					if err2 != nil {
 						fmt.Printf("Failed to delete file: %s", err2)
 					} else {
-						fmt.Printf("Removed File:\n \t id: %s \n \t path: %s \n ", args.Id, args.Path)
+						fmt.Printf("Removed File:\n \t id: %s \n \t path: %s \n ", args.Id, filepath.Join(args.Path, f.Name))
 					}	
 				}
 			}
