@@ -137,7 +137,6 @@ func (self *Drive) downloadBinary(f *drive.File, args DownloadArgs) (int64, int6
 		}
 		fmt.Println(err)
 		fmt.Println(err.Error)
-		fmt.Println(err.Error.Body)
 		return 0, 0, fmt.Errorf("Failed to download file: \n %s \n %s", f.Id,err)
 	}
 
@@ -148,7 +147,7 @@ func (self *Drive) downloadBinary(f *drive.File, args DownloadArgs) (int64, int6
 	fpath := filepath.Join(args.Path, f.Name)
 
 	if !args.Stdout {
-		fmt.Fprintf(args.Out, "Downloading %s -> %s, Can Copy: %s\n", f.Name, fpath,f.Capabilities.CanCopy)
+		fmt.Fprintf(args.Out, "Downloading %s -> %s \n", f.Name, fpath)
 	}
 
 	return self.saveFile(saveFileArgs{
