@@ -30,7 +30,7 @@ See this [link](https://github.com/gdrive-org/gdrive) for binary V2.1.0 : it doe
 To have the skip options, compile from source 
 ## Compile from source
 ```bash
-go get github.com/prasmussen/gdrive
+go get github.com/aghriss/gdrive
 ```
 The gdrive binary should now be available at `$GOPATH/bin/gdrive`
 
