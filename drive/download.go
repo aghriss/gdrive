@@ -130,7 +130,7 @@ func (self *Drive) downloadBinary(f *drive.File, args DownloadArgs) (int64, int6
 	
 	res, err := self.service.Files.Get(f.Id).Context(ctx).Download()
 	if err != nil {
-		if strings.Contains(err.Error, "Abuse") {
+		if strings.Contains(err.Error(), "Abuse") {
 			res, err := self.service.Files.Get(f.Id).AcknowledgeAbuse(true).Context(ctx).Download()
 		}
 	}
