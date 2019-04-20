@@ -10,11 +10,7 @@ import (
 	"google.golang.org/api/drive/v3"
 	"google.golang.org/api/googleapi"
 )
-type DeleteArgs struct {
-	Out       io.Writer
-	Id        string
-	Recursive bool
-}
+
 type DownloadArgs struct {
 	Out       io.Writer
 	Progress  io.Writer
