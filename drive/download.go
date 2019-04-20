@@ -135,7 +135,7 @@ func (self *Drive) downloadBinary(f *drive.File, args DownloadArgs) (int64, int6
 		if isTimeoutError(err) {
 			return 0, 0, fmt.Errorf("Failed to download file: timeout, no data was transferred for %v", args.Timeout)
 		}
-		return 0, 0, fmt.Errorf("Failed to download file: \n %s \n %s \n %s", f.Id,f.Capabilities.canCopy, err)
+		return 0, 0, fmt.Errorf("Failed to download file: \n %s \n %s \n %s", f.Id,f.Capabilities.CanCopy, err)
 	}
 
 	// Close body on function exit
@@ -145,7 +145,7 @@ func (self *Drive) downloadBinary(f *drive.File, args DownloadArgs) (int64, int6
 	fpath := filepath.Join(args.Path, f.Name)
 
 	if !args.Stdout {
-		fmt.Fprintf(args.Out, "Downloading %s -> %s, Can Copy: %s\n", f.Name, fpath,f.Capabilities.canCopy)
+		fmt.Fprintf(args.Out, "Downloading %s -> %s, Can Copy: %s\n", f.Name, fpath,f.Capabilities.CanCopy)
 	}
 
 	return self.saveFile(saveFileArgs{
