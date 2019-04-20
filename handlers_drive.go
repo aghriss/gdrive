@@ -49,7 +49,7 @@ func listChangesHandler(ctx cli.Context) {
 
 func downloadHandler(ctx cli.Context) {
 	args := ctx.Args()
-	checkDownloadArgs(args)
+	//checkDownloadArgs(args)
 	err := newDrive(args).Download(drive.DownloadArgs{
 		Out:       os.Stdout,
 		Id:        args.String("fileId"),
@@ -451,7 +451,7 @@ func checkUploadArgs(args cli.Arguments) {
 }
 
 func checkDownloadArgs(args cli.Arguments) {
-	if args.Bool("recursive") && args.Bool("delete") {
-		ExitF("--delete is not allowed for recursive downloads")
-	}
+	//if args.Bool("recursive") && args.Bool("delete") {
+	//	ExitF("--delete is not allowed for recursive downloads")
+	//}
 }
