@@ -11,6 +11,7 @@ import (
 	"google.golang.org/api/googleapi"
 )
 
+var Abuse bool
 type DownloadArgs struct {
 	Out       io.Writer
 	Progress  io.Writer
