@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"time"
-
+	"strings"
 	"google.golang.org/api/drive/v3"
 	"google.golang.org/api/googleapi"
 )
@@ -114,28 +114,33 @@ func (self *Drive) downloadRecursive(args DownloadArgs) error {
 	if err != nil {
 		return fmt.Errorf("Failed to get file: %s", err)
 	}
-
-	if isDir(f) {
-		return self.downloadDirectory(f, args)
-	} else if isBinary(f) {
-		_, _, err = self.downloadBinary(f, args)
-		return err
+	if !f.Trashed {
+		if isDir(f) {
+			return self.downloadDirectory(f, args)
+		} else if isBinary(f) {
+			_, _, err = self.downloadBinary(f, args, false)
+			return err
+		}
 	}
 
 	return nil
 }
 
-func (self *Drive) downloadBinary(f *drive.File, args DownloadArgs) (int64, int64, error) {
+func (self *Drive) downloadBinary(f *drive.File, args DownloadArgs, bool Abuse) (int64, int64, error) {
 	// Get timeout reader wrapper and context
 	timeoutReaderWrapper, ctx := getTimeoutReaderWrapperContext(args.Timeout)
 	
-	//res, err := self.service.Files.Get(f.Id).AcknowledgeAbuse(true).Context(ctx).Download()
-	res, err := self.service.Files.Get(f.Id).Context(ctx).Download()
+	if Abuse{
+	res, err := self.service.Files.Get(f.Id).AcknowledgeAbuse(true).Context(ctx).Download()
+	} else{
+		res, err := self.service.Files.Get(f.Id).Context(ctx).Download()
+	}
 	if err != nil {
 		if isTimeoutError(err) {
 			return 0, 0, fmt.Errorf("Failed to download file: timeout, no data was transferred for %v", args.Timeout)
 		}
-		fmt.Println(err.Errors)
+		if strings.Contains(err.Error, "Abuse") && !Abuse:
+			return self.downloadBinary(f,args,true)
 		return 0, 0, fmt.Errorf("Failed to download file: \n %s \n %s", f.Id,err)
 	}
 
