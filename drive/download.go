@@ -139,8 +139,8 @@ func (self *Drive) downloadBinary(f *drive.File, args DownloadArgs, bool Abuse) 
 		if isTimeoutError(err) {
 			return 0, 0, fmt.Errorf("Failed to download file: timeout, no data was transferred for %v", args.Timeout)
 		}
-		if strings.Contains(err.Error, "Abuse") && !Abuse:
-			return self.downloadBinary(f,args,true)
+		if strings.Contains(err.Error, "Abuse") && !Abuse {
+			return self.downloadBinary(f,args,true) }
 		return 0, 0, fmt.Errorf("Failed to download file: \n %s \n %s", f.Id,err)
 	}
 
