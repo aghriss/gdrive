@@ -137,7 +137,7 @@ func (self *Drive) downloadBinary(f *drive.File, args DownloadArgs) (int64, int6
 		}
 		//m := make(map[string]interface{})
 		//err := json.Unmarshal(err, &m)
-		return 0, 0, fmt.Errorf("Failed to download file: \n %s \n %s \n %s", f.Id,f.Capabilities.CanCopy, err.Error)
+		return 0, 0, fmt.Errorf("Failed to download file: \n %s \n %s \n %s \%s", f.Id,f.Capabilities.CanCopy,err, err.Error.Erros)
 	}
 
 	// Close body on function exit
