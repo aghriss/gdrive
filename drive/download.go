@@ -10,7 +10,11 @@ import (
 	"google.golang.org/api/drive/v3"
 	"google.golang.org/api/googleapi"
 )
-
+type DeleteArgs struct {
+	Out       io.Writer
+	Id        string
+	Recursive bool
+}
 type DownloadArgs struct {
 	Out       io.Writer
 	Progress  io.Writer
@@ -117,9 +121,9 @@ func (self *Drive) downloadRecursive(args DownloadArgs) error {
 			err :=self.downloadDirectory(f, args)
 			if err==nil {
 				if  args.Delete {
-					err2 := self.Delete(args)
+					err2 := self.Delete(DeleteArgs{args.Out, args.Id, args.Recursive})
 					if err2 != nil {
-						fmt.Println("Failed to delete Folder: %s", err2)
+						fmt.Println("Failed to delete Folder: %s\n", err2)
 					} else {
 						fmt.Println("Removed Folder %s \n", args.Id)
 					}	
