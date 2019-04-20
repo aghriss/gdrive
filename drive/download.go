@@ -19,7 +19,6 @@ type DownloadArgs struct {
 	Force     bool
 	Skip      bool
 	Recursive bool
-	Abuse	  bool
 	Delete    bool
 	Stdout    bool
 	Timeout   time.Duration
@@ -43,7 +42,7 @@ func (self *Drive) Download(args DownloadArgs) error {
 		return fmt.Errorf("'%s' is a google document and must be exported, see the export command", f.Name)
 	}
 
-	bytes, rate, err := self.downloadBinary(f, args, false)
+	bytes, rate, err := self.downloadBinary(f, args)
 	if err != nil {
 		return err
 	}
@@ -71,7 +70,6 @@ type DownloadQueryArgs struct {
 	Query     string
 	Path      string
 	Force     bool
-	Abuse	  bool
 	Skip      bool
 	Recursive bool
 }
@@ -98,7 +96,7 @@ func (self *Drive) DownloadQuery(args DownloadQueryArgs) error {
 		if isDir(f) && args.Recursive {
 			err = self.downloadDirectory(f, downloadArgs)
 		} else if isBinary(f) {
-			_, _, err = self.downloadBinary(f, downloadArgs, false)
+			_, _, err = self.downloadBinary(f, downloadArgs)
 		}
 
 		if err != nil {
@@ -118,7 +116,7 @@ func (self *Drive) downloadRecursive(args DownloadArgs) error {
 		if isDir(f) {
 			return self.downloadDirectory(f, args)
 		} else if isBinary(f) {
-			_, _, err = self.downloadBinary(f, args, false)
+			_, _, err = self.downloadBinary(f, args)
 			return err
 		}
 	}
@@ -126,21 +124,21 @@ func (self *Drive) downloadRecursive(args DownloadArgs) error {
 	return nil
 }
 
-func (self *Drive) downloadBinary(f *drive.File, args DownloadArgs, Abuse bool) (int64, int64, error) {
+func (self *Drive) downloadBinary(f *drive.File, args DownloadArgs) (int64, int64, error) {
 	// Get timeout reader wrapper and context
 	timeoutReaderWrapper, ctx := getTimeoutReaderWrapperContext(args.Timeout)
 	
-	if Abuse{
-		res, err := self.service.Files.Get(f.Id).AcknowledgeAbuse(true).Context(ctx).Download()
-	} else{
-		res, err := self.service.Files.Get(f.Id).Context(ctx).Download()
+	res, err := self.service.Files.Get(f.Id).Context(ctx).Download()
+	if err != nil {
+		if strings.Contains(err.Error, "Abuse") {
+			res, err := self.service.Files.Get(f.Id).AcknowledgeAbuse(true).Context(ctx).Download()
+		}
 	}
+
 	if err != nil {
 		if isTimeoutError(err) {
 			return 0, 0, fmt.Errorf("Failed to download file: timeout, no data was transferred for %v", args.Timeout)
 		}
-		if strings.Contains(err.Error, "Abuse") && !Abuse {
-			return self.downloadBinary(f,args,true) }
 		return 0, 0, fmt.Errorf("Failed to download file: \n %s \n %s", f.Id,err)
 	}
 
@@ -250,7 +248,6 @@ func (self *Drive) downloadDirectory(parent *drive.File, args DownloadArgs) erro
 		newArgs.Path = newPath
 		newArgs.Id = f.Id
 		newArgs.Stdout = false
-		newArgs.Abuse = true
 		
 		err = self.downloadRecursive(newArgs)
 		if err != nil {
