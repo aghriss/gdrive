@@ -11,7 +11,6 @@ import (
 	"google.golang.org/api/googleapi"
 )
 
-var Abuse bool
 type DownloadArgs struct {
 	Out       io.Writer
 	Progress  io.Writer
@@ -127,7 +126,7 @@ func (self *Drive) downloadRecursive(args DownloadArgs) error {
 	return nil
 }
 
-func (self *Drive) downloadBinary(f *drive.File, args DownloadArgs, bool Abuse) (int64, int64, error) {
+func (self *Drive) downloadBinary(f *drive.File, args DownloadArgs, Abuse bool) (int64, int64, error) {
 	// Get timeout reader wrapper and context
 	timeoutReaderWrapper, ctx := getTimeoutReaderWrapperContext(args.Timeout)
 	
