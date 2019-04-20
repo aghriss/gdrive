@@ -19,6 +19,7 @@ type DownloadArgs struct {
 	Force     bool
 	Skip      bool
 	Recursive bool
+	Abuse	  bool
 	Delete    bool
 	Stdout    bool
 	Timeout   time.Duration
