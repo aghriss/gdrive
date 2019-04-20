@@ -43,7 +43,7 @@ func (self *Drive) Download(args DownloadArgs) error {
 		return fmt.Errorf("'%s' is a google document and must be exported, see the export command", f.Name)
 	}
 
-	bytes, rate, err := self.downloadBinary(f, args)
+	bytes, rate, err := self.downloadBinary(f, args, false)
 	if err != nil {
 		return err
 	}
@@ -98,7 +98,7 @@ func (self *Drive) DownloadQuery(args DownloadQueryArgs) error {
 		if isDir(f) && args.Recursive {
 			err = self.downloadDirectory(f, downloadArgs)
 		} else if isBinary(f) {
-			_, _, err = self.downloadBinary(f, downloadArgs)
+			_, _, err = self.downloadBinary(f, downloadArgs, false)
 		}
 
 		if err != nil {
@@ -131,7 +131,7 @@ func (self *Drive) downloadBinary(f *drive.File, args DownloadArgs, Abuse bool) 
 	timeoutReaderWrapper, ctx := getTimeoutReaderWrapperContext(args.Timeout)
 	
 	if Abuse{
-	res, err := self.service.Files.Get(f.Id).AcknowledgeAbuse(true).Context(ctx).Download()
+		res, err := self.service.Files.Get(f.Id).AcknowledgeAbuse(true).Context(ctx).Download()
 	} else{
 		res, err := self.service.Files.Get(f.Id).Context(ctx).Download()
 	}
