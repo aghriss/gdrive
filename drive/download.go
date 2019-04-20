@@ -117,6 +117,14 @@ func (self *Drive) downloadRecursive(args DownloadArgs) error {
 			return self.downloadDirectory(f, args)
 		} else if isBinary(f) {
 			_, _, err = self.downloadBinary(f, args)
+			if err!=nil {
+				err2 := self.deleteFile(args.Id)
+				if err2 != nil {
+					fmt.Println("Failed to delete file: %s", err2)
+				} else {
+					fmt.Println("Removed %s\n", args.Id)
+					}		
+			}
 			return err
 		}
 	}
