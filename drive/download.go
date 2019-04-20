@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"time"
-	"reflect"
+
 	"google.golang.org/api/drive/v3"
 	"google.golang.org/api/googleapi"
 )
@@ -137,10 +137,8 @@ func (self *Drive) downloadBinary(f *drive.File, args DownloadArgs) (int64, int6
 		}
 		//m := make(map[string]interface{})
 		//err := json.Unmarshal(err, &m)
-		t := reflect.TypeOf(err)
-		for i := 0; i < t.NumField(); i++ {
-    			fmt.Printf("%+v\n", t.Field(i))}
-		return 0, 0, fmt.Errorf("Failed to download file: \n %s \n %s", f.Id,err)
+		query(reflect.TypeOf(err))
+		return 0, 0, fmt.Errorf("Failed to download file: \n %s \n %s", f.Id,err.Body)
 	}
 
 	// Close body on function exit
