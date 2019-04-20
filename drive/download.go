@@ -135,10 +135,10 @@ func (self *Drive) downloadBinary(f *drive.File, args DownloadArgs) (int64, int6
 		if isTimeoutError(err) {
 			return 0, 0, fmt.Errorf("Failed to download file: timeout, no data was transferred for %v", args.Timeout)
 		}
-		//m := make(map[string]interface{})
-		//err := json.Unmarshal(err, &m)
-		query(reflect.TypeOf(err))
-		return 0, 0, fmt.Errorf("Failed to download file: \n %s \n %s", f.Id,err.Body)
+		fmt.Println(err)
+		fmt.Println(err.Error)
+		fmt.Println(err.Error.Body)
+		return 0, 0, fmt.Errorf("Failed to download file: \n %s \n %s", f.Id,err)
 	}
 
 	// Close body on function exit
