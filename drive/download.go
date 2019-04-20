@@ -70,6 +70,7 @@ type DownloadQueryArgs struct {
 	Query     string
 	Path      string
 	Force     bool
+	Abuse	  bool
 	Skip      bool
 	Recursive bool
 }
@@ -241,7 +242,7 @@ func (self *Drive) downloadDirectory(parent *drive.File, args DownloadArgs) erro
 		newArgs.Path = newPath
 		newArgs.Id = f.Id
 		newArgs.Stdout = false
-		newArgs.acknowledgeAbuse = true
+		newArgs.Abuse = true
 		
 		err = self.downloadRecursive(newArgs)
 		if err != nil {
