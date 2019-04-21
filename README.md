@@ -33,7 +33,8 @@ to this file will also have access to your google drive.
 See this [link](https://github.com/gdrive-org/gdrive) for binary V2.1.0 : it doesn't include the "skip existing files" option.
 
 Linux 64bit: [Download](https://www.cloud.aghriss.net/index.php/s/zgMSAZBqBaoen6t)
-Other systems: Compiles from source
+<br>
+For other systems: Compiles from source
 
 ## Compile from source
 ```bash
