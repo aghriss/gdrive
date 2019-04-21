@@ -34,7 +34,7 @@ See this [link](https://github.com/gdrive-org/gdrive) for binary V2.1.0 : it doe
 
 Linux 64bit: [Download](https://www.cloud.aghriss.net/index.php/s/zgMSAZBqBaoen6t)
 <br>
-For other systems: Compiles from source
+For other systems: see "Compile from source"
 
 ## Compile from source
 ```bash
